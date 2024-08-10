@@ -74,6 +74,12 @@ public class Task {
 
     //дата и время завершения задачи
     public LocalDateTime getEndTime() {
+        if (this.startTime == null) {
+            return null;
+        }
+        if (this.duration == null) {
+            return this.startTime;
+        }
         return this.startTime.plus(duration);
     }
 

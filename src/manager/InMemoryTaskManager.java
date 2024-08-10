@@ -1,3 +1,6 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -8,7 +11,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Subtask> subtasks = new HashMap<>();
     protected final Map<Integer, Epic> epics = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-    private final TreeSet<Task> prioritizedTasks = new TreeSet<>(new PrioritizedTasksComparator());
+    private final Set<Task> prioritizedTasks = new TreeSet<>(new PrioritizedTasksComparator());
 
     protected int nextId = 1;
 
@@ -53,7 +56,7 @@ public class InMemoryTaskManager implements TaskManager {
     //Удаление всех задач
     @Override
     public void clearTasks() {
-        tasks.values().stream().forEach(task -> {
+        tasks.values().forEach(task -> {
             historyManager.remove(task.getId());
             removePrioritizedTasks(task);
         });
@@ -136,6 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.add(input);
         epic.addSubtask(input);
         reCalcAndSaveEpicStatus(epicId);
+        reCalcAndSaveEpicTimes(epicId);
         return input;
     }
 
@@ -172,8 +176,11 @@ public class InMemoryTaskManager implements TaskManager {
         addPrioritizedTasks(input);
         subtasks.put(input.getId(), input);
         reCalcAndSaveEpicStatus(epicId);
+        reCalcAndSaveEpicTimes(epicId);
         return input;
     }
+
+
 
     //Обновление эпика. Новая версия объекта с верным идентификатором передаётся в виде параметра
     @Override
@@ -207,6 +214,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.removeSubtask(subtask);
         boolean result = subtasks.remove(id) != null;
         reCalcAndSaveEpicStatus(epicId);
+        reCalcAndSaveEpicTimes(epicId);
         historyManager.remove(id);
         removePrioritizedTasks(subtask);
         return result;
@@ -216,7 +224,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public boolean removeEpicById(Integer id) {
         Collection<Subtask> subtaskCollection = getSubtasksByEpicId(id);
-        subtaskCollection.stream().forEach(subtask -> {
+        subtaskCollection.forEach(subtask -> {
             subtasks.remove(subtask.getId());
         });
         historyManager.remove(id);
@@ -259,6 +267,56 @@ public class InMemoryTaskManager implements TaskManager {
         Status statusEpic = getStatusEpic(epicId);
         epic.setStatus(statusEpic);
     }
+    private void reCalcAndSaveEpicTimes(Integer epicId) {
+        Epic epic = getEpicById(epicId);
+        LocalDateTime start = getStartTimeEpic(epicId);
+        epic.setStartTime(start);
+        Duration d = getDurationEpic(epicId);
+        epic.setDuration(d);
+        LocalDateTime end = getEndTimeEpic(epicId);
+        epic.setEndTime(end);
+    }
+
+    private LocalDateTime getEndTimeEpic(Integer epicId) {
+        var subtasks = getSubtasksByEpicId(epicId);
+        final ZoneOffset zone = ZoneOffset.of("Z");
+        var resLong = subtasks
+                .stream()
+                .filter(f -> f.getStartTime() != null)
+                .mapToLong(s ->  s.getEndTime().toEpochSecond(zone))
+                .reduce(Long::max);
+        if(resLong.isPresent()) {
+            return LocalDateTime.ofEpochSecond(resLong.getAsLong(), 0, zone);
+        }
+
+        return null;
+    }
+
+    private Duration getDurationEpic(Integer epicId) {
+        var subtasks = getSubtasksByEpicId(epicId);
+        long result = subtasks
+                .stream()
+                .filter(f -> f.getDuration() != null)
+                .mapToLong(s -> s.getDuration().toMinutes())
+                .sum();
+        return Duration.ofMinutes(result);
+    }
+
+    private LocalDateTime getStartTimeEpic(Integer epicId) {
+        final ZoneOffset zone = ZoneOffset.of("Z");
+        var subtasks = getSubtasksByEpicId(epicId);
+        var startTime = subtasks
+                        .stream()
+                        .filter(f -> f.getStartTime() != null)
+                        .mapToLong(s ->  s.getStartTime().toEpochSecond(zone))
+                        .reduce(Long::min);
+        if (!startTime.isEmpty()) {
+            LocalDateTime result = LocalDateTime.ofEpochSecond(startTime.getAsLong(), 0, zone);
+            return result;
+        }
+        return null;
+    }
+
 
     public Set<Task> getPrioritizedTasks() {
         return prioritizedTasks;
