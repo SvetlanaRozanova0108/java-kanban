@@ -267,6 +267,7 @@ public class InMemoryTaskManager implements TaskManager {
         Status statusEpic = getStatusEpic(epicId);
         epic.setStatus(statusEpic);
     }
+
     private void reCalcAndSaveEpicTimes(Integer epicId) {
         Epic epic = getEpicById(epicId);
         LocalDateTime start = getStartTimeEpic(epicId);
@@ -285,7 +286,7 @@ public class InMemoryTaskManager implements TaskManager {
                 .filter(f -> f.getStartTime() != null)
                 .mapToLong(s ->  s.getEndTime().toEpochSecond(zone))
                 .reduce(Long::max);
-        if(resLong.isPresent()) {
+        if (resLong.isPresent()) {
             return LocalDateTime.ofEpochSecond(resLong.getAsLong(), 0, zone);
         }
 
