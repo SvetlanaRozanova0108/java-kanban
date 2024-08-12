@@ -11,7 +11,16 @@ public class InMemoryTaskManager implements TaskManager {
     protected final Map<Integer, Subtask> subtasks = new HashMap<>();
     protected final Map<Integer, Epic> epics = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
-    private final Set<Task> prioritizedTasks = new TreeSet<>(new PrioritizedTasksComparator());
+    //private final Set<Task> prioritizedTasks = new TreeSet<>(new PrioritizedTasksComparator());
+    private final Set<Task> prioritizedTasks = new TreeSet<>((item1, item2) -> {
+        if (item1.getStartTime().isAfter(item2.getStartTime())) {
+            return 1;
+        } else if (item1.getStartTime().isBefore(item2.getStartTime())) {
+            return -1;
+        } else {
+            return 0;
+        }
+    });
 
     protected int nextId = 1;
 
@@ -243,7 +252,7 @@ public class InMemoryTaskManager implements TaskManager {
         var subTaskInProgress = subtaskCollection
                 .stream()
                 .filter(f -> f.getStatus() == Status.IN_PROGRESS)
-                .collect(Collectors.toList());
+                .toList();
         if (!subTaskInProgress.isEmpty()) {
             result = Status.IN_PROGRESS;
         }
