@@ -1,7 +1,11 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Epic extends Task {
+
+
+    private LocalDateTime epicEndTime;
 
     private final ArrayList<Integer> subtaskIds = new ArrayList<>();
 
@@ -13,12 +17,12 @@ public class Epic extends Task {
         super(id, name, description, status);
     }
 
-    public void addSubtaskId(Integer subtaskId) {
-        subtaskIds.add(subtaskId);
+    public void addSubtask(Subtask input) {
+        subtaskIds.add(input.getId());
     }
 
-    public void removeSubtaskId(Integer subtaskId) {
-        subtaskIds.remove(subtaskId);
+    public void removeSubtask(Subtask input) {
+        subtaskIds.remove(input.getId());
     }
 
     public Collection<Integer> getSubtaskIds() {
@@ -30,7 +34,20 @@ public class Epic extends Task {
     }
 
     @Override
+    public LocalDateTime getEndTime() {
+        return epicEndTime;
+    }
+
+    public void setEndTime(LocalDateTime epicEndTime) {
+        this.epicEndTime = epicEndTime;
+    }
+
+    @Override
     public String toString() {
-        return getId() + ",epic," + getName() + "," + getStatus() + "," + getDescription() + ",";
+        var dur = getDuration();
+        var durStr = dur != null ?  String.valueOf(dur.toMinutes()) : "";
+        var start = getStartTime();
+        var startStr = start != null ?  String.valueOf(start) : "";
+        return getId() + ",epic," + getName() + "," + getStatus() + "," + getDescription() + "," + startStr + "," + durStr + ",";
     }
 }

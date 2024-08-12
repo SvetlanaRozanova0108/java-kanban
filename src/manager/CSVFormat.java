@@ -31,6 +31,6 @@ public class CSVFormat {
     }
 
     public static String getHeader() {
-        return "id,type,name,status,description,epic";
+        return "id,type,name,status,description,startTime,duration,epic";
     }
 }

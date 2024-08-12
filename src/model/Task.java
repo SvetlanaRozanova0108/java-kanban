@@ -1,3 +1,5 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -6,6 +8,8 @@ public class Task {
     private String name;
     private String description;
     private Status status;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String name, String description) {
         this.status = Status.NEW;
@@ -19,7 +23,6 @@ public class Task {
         this.description = description;
         this.status = status;
     }
-
 
     public Integer getId() {
         return id;
@@ -53,13 +56,39 @@ public class Task {
         this.status = status;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    //дата и время завершения задачи
+    public LocalDateTime getEndTime() {
+        if (this.startTime == null) {
+            return null;
+        }
+        if (this.duration == null) {
+            return this.startTime;
+        }
+        return this.startTime.plus(duration);
+    }
 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Task task = (Task) object;
-        return id == task.id && Objects.equals(name, task.name) && Objects.equals(description, task.description)
+        return Objects.equals(id, task.id) && Objects.equals(name, task.name) && Objects.equals(description, task.description)
                 && status == task.status;
     }
 
@@ -68,9 +97,14 @@ public class Task {
         return Objects.hash(id, name, description, status);
     }
 
-    // id,type,name,status,description,epic
     @Override
     public String toString() {
-        return id + ",task," + name + "," + status + "," + description + ",";
+        String durStr = "";
+        if (duration != null) {
+            durStr = String.valueOf(duration.toMinutes());
+        }
+        var start = getStartTime();
+        var startStr = start != null ? String.valueOf(start) : "";
+        return id + ",task," + name + "," + status + "," + description + "," + startStr + "," + durStr + ",";
     }
 }

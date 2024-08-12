@@ -1,7 +1,10 @@
 import org.junit.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TaskManagerTest< T extends TaskManager > {
 
@@ -25,7 +28,7 @@ public abstract class TaskManagerTest< T extends TaskManager > {
         Epic epic = new Epic("Отдохнуть на море.", "Каспийское море.");
 
         Epic epicCreated = tm.creationEpic(epic);
-        Subtask subtask = new Subtask(epicCreated.getId(),"Оформить страховку", "РЕСО-Гарантия");
+        Subtask subtask = new Subtask(epicCreated.getId(), "Оформить страховку", "РЕСО-Гарантия");
         Subtask subtaskCreated = tm.creationSubtask(subtask);
         Subtask subtaskGetted = tm.getSubtaskById(subtaskCreated.getId());
         assertEquals(subtaskCreated, subtaskGetted);
@@ -77,9 +80,29 @@ public abstract class TaskManagerTest< T extends TaskManager > {
         Epic epic = new Epic("Отдохнуть на море.", "Каспийское море.");
         TaskManager tm = new InMemoryTaskManager();
         Epic epicCreated = tm.creationEpic(epic);
-        Subtask subtask = new Subtask(epicCreated.getId(),"Оформить страховку", "РЕСО-Гарантия");
+        Subtask subtask = new Subtask(epicCreated.getId(), "Оформить страховку", "РЕСО-Гарантия");
         Subtask subtaskCreated = tm.creationSubtask(subtask);
         tm.removeSubtaskById(subtaskCreated.getId());
         assertTrue(epicCreated.getSubtaskIds().isEmpty());
+    }
+
+
+    @Test
+    //Тест на корректность расчёта пересечения интервалов
+    public void testForTheCorrectOfCalculatingTheIntersectionOfIntervals() {
+        Task task1 = new Task("Задача 1.", "Описание 1.");
+        task1.setStartTime(LocalDateTime.now());
+        task1.setDuration(Duration.ofDays(7));
+        Task taskCreated1 = tm.creationTask(task1);
+        Task task2 = new Task("Задача 2.", "Описание 2.");
+        task2.setStartTime(LocalDateTime.now());
+        task2.setDuration(Duration.ofDays(7));
+        UnsupportedOperationException thrown = assertThrows(
+                UnsupportedOperationException.class,
+                () -> tm.creationTask(task2),
+                ""
+        );
+
+        assertTrue(thrown.getMessage().contains("Задача пересекается по времени исполнения с другими задачами."));
     }
 }
