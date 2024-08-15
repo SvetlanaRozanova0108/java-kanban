@@ -1,5 +1,6 @@
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -24,13 +25,13 @@ public interface TaskManager {
 
     Epic updateEpic(Epic input);
 
-    Collection<Task> getTasks();
+    List<Task> getTasks();
 
-    Collection<Subtask> getSubtasks();
+    List<Subtask> getSubtasks();
 
-    Collection<Epic> getEpics();
+    List<Epic> getEpics();
 
-    Collection<Subtask> getSubtasksByEpicId(Integer id);
+    List<Subtask> getSubtasksByEpicId(Integer id);
 
     boolean removeTaskById(Integer id);
 
@@ -45,4 +46,6 @@ public interface TaskManager {
     void clearEpics();
 
     List<Task> getHistory();
+
+    Set<Task> getPrioritizedTasks();
 }

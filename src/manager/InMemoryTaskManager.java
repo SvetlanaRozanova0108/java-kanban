@@ -31,28 +31,28 @@ public class InMemoryTaskManager implements TaskManager {
 
     //Получение списка всех задач
     @Override
-    public Collection<Task> getTasks() {
-        Collection<Task> result =  tasks.values();
+    public List<Task> getTasks() {
+        List<Task> result =  tasks.values().stream().toList();
         return result;
     }
 
     //Получение списка всех подзадач
     @Override
-    public Collection<Subtask> getSubtasks() {
-        Collection<Subtask> result =  subtasks.values();
+    public List<Subtask> getSubtasks() {
+        List<Subtask> result =  subtasks.values().stream().toList();
         return result;
     }
 
     //Получение списка всех эпиков
     @Override
-    public Collection<Epic> getEpics() {
-        Collection<Epic> result =  epics.values();
+    public List<Epic> getEpics() {
+        List<Epic> result =  epics.values().stream().toList();
         return result;
     }
 
     //Получение списка всех подзадач определённого эпика
     @Override
-    public Collection<Subtask> getSubtasksByEpicId(Integer id) {
+    public List<Subtask> getSubtasksByEpicId(Integer id) {
         Epic currentEpic = getEpicById(id);
         List<Subtask> result = currentEpic.getSubtaskIds().stream()
                 .map(subtaskId -> {
@@ -101,6 +101,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(Integer id) {
         Task result = tasks.get(id);
+        if (result == null) {
+            throw new NotFoundException();
+        }
         historyManager.add(result);
         return result;
     }
@@ -109,6 +112,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(Integer id) {
         Subtask result = subtasks.get(id);
+        if (result == null) {
+            throw new NotFoundException();
+        }
         historyManager.add(result);
         return result;
     }
@@ -117,6 +123,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(Integer id) {
         Epic result = epics.get(id);
+        if (result == null) {
+            throw new NotFoundException();
+        }
         historyManager.add(result);
         return result;
     }
