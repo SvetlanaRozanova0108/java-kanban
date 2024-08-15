@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -58,7 +59,7 @@ public class SubtasksHandler extends BaseHttpHandler {
     private void handlePostSubtaskUpsert(HttpExchange exchange) throws IOException {
         var body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Subtask subtask = gson.fromJson(body, Subtask.class);
-        if(subtask.getId() > 0) {
+        if (subtask.getId() > 0) {
             taskManager.updateSubtask(subtask);
             sendText(exchange, "");
         } else {
@@ -69,7 +70,7 @@ public class SubtasksHandler extends BaseHttpHandler {
 
     private void handleDeleteSubtaskId(HttpExchange exchange) throws IOException {
         var delSubtaskId = getId(exchange);
-        if(delSubtaskId.isEmpty()){
+        if (delSubtaskId.isEmpty()) {
             sendNotFound(exchange, "not number");
         }
         var result = taskManager.removeSubtaskById(delSubtaskId.get());

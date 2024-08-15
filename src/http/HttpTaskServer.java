@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpServer;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,7 +24,7 @@ public class HttpTaskServer {
         taskServer.stop();
     }
 
-    public  void stop() {
+    public void stop() {
         httpServer.stop(1000);
     }
 

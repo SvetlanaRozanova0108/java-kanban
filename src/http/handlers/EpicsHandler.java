@@ -1,5 +1,6 @@
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
@@ -23,13 +24,12 @@ public class EpicsHandler extends BaseHttpHandler {
             if (requestMethod.equals("GET")) {
                 if (pathParts.length == 2) {
                     handleGetEpics(exchange);
-                } if (pathParts.length == 3) {
-                    handleGetEpicByIdId(exchange);
                 }
-                else if (pathParts.length == 4 && pathParts[3].equals("subtasks"))
-                     {
-                         handleGetEpicSubtasksId(exchange);
-                     }
+                if (pathParts.length == 3) {
+                    handleGetEpicByIdId(exchange);
+                } else if (pathParts.length == 4 && pathParts[3].equals("subtasks")) {
+                    handleGetEpicSubtasksId(exchange);
+                }
             }
             if (requestMethod.equals("POST")) {
                 handlePostEpicUpsert(exchange);
@@ -48,7 +48,7 @@ public class EpicsHandler extends BaseHttpHandler {
 
     private void handleGetEpicByIdId(HttpExchange exchange) throws IOException {
         var epicId = getId(exchange);
-        if(epicId.isEmpty()){
+        if (epicId.isEmpty()) {
             sendNotFound(exchange, "not number");
         }
         try {
@@ -62,7 +62,7 @@ public class EpicsHandler extends BaseHttpHandler {
 
     private void handleGetEpicSubtasksId(HttpExchange exchange) throws IOException {
         var epicSubtaskId = getId(exchange);
-        if(epicSubtaskId.isEmpty()){
+        if (epicSubtaskId.isEmpty()) {
             sendNotFound(exchange, "not number");
         }
         var epics = taskManager.getSubtasksByEpicId(epicSubtaskId.get());
@@ -73,7 +73,7 @@ public class EpicsHandler extends BaseHttpHandler {
     private void handlePostEpicUpsert(HttpExchange exchange) throws IOException {
         var body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Epic epic = gson.fromJson(body, Epic.class);
-        if(epic.getId() > 0) {
+        if (epic.getId() > 0) {
             taskManager.updateEpic(epic);
             sendText(exchange, "");
         } else {
@@ -84,7 +84,7 @@ public class EpicsHandler extends BaseHttpHandler {
 
     private void handleDeleteEpicId(HttpExchange exchange) throws IOException {
         var delEpicId = getId(exchange);
-        if(delEpicId.isEmpty()){
+        if (delEpicId.isEmpty()) {
             sendNotFound(exchange, "not number");
         }
         var result = taskManager.removeEpicById(delEpicId.get());

@@ -25,11 +25,11 @@ public class Task {
     }
 
     public Task(String name, String descr, Status status, Duration duration, LocalDateTime start) {
-        this.name =name;
-        this.description=descr;
+        this.name = name;
+        this.description = descr;
         this.status = status;
-        this.duration =duration;
-        this.startTime =start;
+        this.duration = duration;
+        this.startTime = start;
     }
 
     public Integer getId() {

@@ -10,12 +10,12 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
-    public Subtask(Integer id, Integer epicId, String name, String description,  Status  status) {
+    public Subtask(Integer id, Integer epicId, String name, String description, Status status) {
         super(id, name, description, status);
         this.epicId = epicId;
     }
 
-    public Subtask(Integer id, String name, String description,  Status  status) {
+    public Subtask(Integer id, String name, String description, Status status) {
         super(id, name, description, status);
     }
 
@@ -31,9 +31,9 @@ public class Subtask extends Task {
     @Override
     public String toString() {
         var dur = getDuration();
-        var durStr = dur != null ?  String.valueOf(dur.toMinutes()) : "";
+        var durStr = dur != null ? String.valueOf(dur.toMinutes()) : "";
         var start = getStartTime();
-        var startStr = start != null ?  String.valueOf(start) : "";
+        var startStr = start != null ? String.valueOf(start) : "";
         return getId() + ",subtask," + getName() + "," + getStatus() + "," + getDescription() + "," + startStr + "," + durStr + "," + epicId;
     }
 }

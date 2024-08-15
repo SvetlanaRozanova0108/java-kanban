@@ -17,8 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-
-
 public class HttpTaskManagerTasksTest {
 
     // создаём экземпляр InMemoryTaskManager
@@ -110,7 +108,7 @@ public class HttpTaskManagerTasksTest {
     public void handleGetSubtasksTest() throws IOException, InterruptedException {
         Epic epic = new Epic("Отдохнуть на море.", "Каспийское море.");
         Epic epicCreated = manager.creationEpic(epic);
-        Subtask subtask = new Subtask(epicCreated.getId(),"Test 3", "Testing subtask 3",
+        Subtask subtask = new Subtask(epicCreated.getId(), "Test 3", "Testing subtask 3",
                 Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         manager.creationSubtask(subtask);
         HttpClient client = HttpClient.newHttpClient();
@@ -128,7 +126,7 @@ public class HttpTaskManagerTasksTest {
     public void handleGetSubtaskByIdTest() throws IOException, InterruptedException {
         Epic epic = new Epic("Отдохнуть на море.", "Каспийское море.");
         Epic epicCreated = manager.creationEpic(epic);
-        Subtask subtask = new Subtask(epicCreated.getId(),"Test 3", "Testing subtask 3",
+        Subtask subtask = new Subtask(epicCreated.getId(), "Test 3", "Testing subtask 3",
                 Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         manager.creationSubtask(subtask);
         HttpClient client = HttpClient.newHttpClient();
@@ -145,7 +143,7 @@ public class HttpTaskManagerTasksTest {
     public void handlePostSubtaskUpsertTest() throws IOException, InterruptedException {
         Epic epic = new Epic("Отдохнуть на море.", "Каспийское море.");
         Epic epicCreated = manager.creationEpic(epic);
-        Subtask subtask = new Subtask(epicCreated.getId(),"Test 3", "Testing subtask 3",
+        Subtask subtask = new Subtask(epicCreated.getId(), "Test 3", "Testing subtask 3",
                 Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         String subtaskJson = gson.toJson(subtask);
         HttpClient client = HttpClient.newHttpClient();
@@ -164,7 +162,7 @@ public class HttpTaskManagerTasksTest {
     public void handleDeleteSubtaskIdTest() throws IOException, InterruptedException {
         Epic epic = new Epic("Отдохнуть на море.", "Каспийское море.");
         Epic epicCreated = manager.creationEpic(epic);
-        Subtask subtask = new Subtask(epicCreated.getId(),"Test 3", "Testing subtask 3",
+        Subtask subtask = new Subtask(epicCreated.getId(), "Test 3", "Testing subtask 3",
                 Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         manager.creationSubtask(subtask);
         HttpClient client = HttpClient.newHttpClient();
@@ -196,7 +194,7 @@ public class HttpTaskManagerTasksTest {
                 Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         manager.creationEpic(epic);
         HttpClient client = HttpClient.newHttpClient();
-        URI url = URI.create("http://localhost:8080/epics/"+ epic.getId());
+        URI url = URI.create("http://localhost:8080/epics/" + epic.getId());
         HttpRequest request = HttpRequest.newBuilder().uri(url).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         assertEquals(200, response.statusCode());
@@ -210,7 +208,7 @@ public class HttpTaskManagerTasksTest {
         Epic epic = new Epic("Test 2", "Testing task 2",
                 Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         manager.creationEpic(epic);
-        Subtask subtask = new Subtask(epic.getId(),"Test 3", "Testing subtask 3",
+        Subtask subtask = new Subtask(epic.getId(), "Test 3", "Testing subtask 3",
                 Status.NEW, Duration.ofMinutes(5), LocalDateTime.now());
         manager.creationSubtask(subtask);
         HttpClient client = HttpClient.newHttpClient();
