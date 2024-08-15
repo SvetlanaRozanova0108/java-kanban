@@ -26,8 +26,7 @@ public class BaseHttpHandler implements HttpHandler {
         int result;
         try {
             result = Integer.parseInt(pathParts[2]);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return Optional.empty();
         }
         return Optional.of(result);
