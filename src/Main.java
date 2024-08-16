@@ -3,7 +3,7 @@ public class Main {
 
     private static final TaskManager taskManager = Managers.getDefault();
 
-    public static void main(String[] args) {
+    private static void main(String[] args) {
         addTasks();
         printAllTasks(taskManager);
     }
