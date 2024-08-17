@@ -59,7 +59,7 @@ public class SubtasksHandler extends BaseHttpHandler {
     private void handlePostSubtaskUpsert(HttpExchange exchange) throws IOException {
         var body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Subtask subtask = gson.fromJson(body, Subtask.class);
-        if (subtask.getId() > 0) {
+        if (subtask.getId() != null) {
             taskManager.updateSubtask(subtask);
             sendText(exchange, "");
         } else {

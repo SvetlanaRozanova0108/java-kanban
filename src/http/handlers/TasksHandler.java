@@ -59,13 +59,17 @@ public class TasksHandler extends BaseHttpHandler {
     private void handlePostTaskUpsert(HttpExchange exchange) throws IOException {
         var body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Task task = gson.fromJson(body, Task.class);
-        if (task.getId() > 0) {
-            taskManager.updateTask(task);
-            sendText(exchange, "");
+        Task result = null;
+        if (task.getId() != null) {
+
+            result = taskManager.updateTask(task);
+
         } else {
-            taskManager.creationTask(task);
-            sendText(exchange, "");
+            result = taskManager.creationTask(task);
+
         }
+        var response = gson.toJson(result);
+        sendText(exchange, response);
     }
 
     private void handleDeleteTaskId(HttpExchange exchange) throws IOException {

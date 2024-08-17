@@ -73,7 +73,7 @@ public class EpicsHandler extends BaseHttpHandler {
     private void handlePostEpicUpsert(HttpExchange exchange) throws IOException {
         var body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Epic epic = gson.fromJson(body, Epic.class);
-        if (epic.getId() > 0) {
+        if (epic.getId() != null) {
             taskManager.updateEpic(epic);
             sendText(exchange, "");
         } else {
