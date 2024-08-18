@@ -9,7 +9,7 @@ public class HttpTaskServer {
 
     private HttpServer httpServer;
     private final TaskManager taskManager;
-    private final Gson gson;
+    private static Gson gson;
 
     public HttpTaskServer(TaskManager taskManager) {
         this.taskManager = taskManager;

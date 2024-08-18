@@ -59,7 +59,7 @@ public class TasksHandler extends BaseHttpHandler {
     private void handlePostTaskUpsert(HttpExchange exchange) throws IOException {
         var body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
         Task task = gson.fromJson(body, Task.class);
-        Task result = null;
+        Task result;
         if (task.getId() != null) {
 
             result = taskManager.updateTask(task);

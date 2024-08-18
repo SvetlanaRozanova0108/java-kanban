@@ -8,7 +8,7 @@ public class SubtaskDeserializer implements JsonDeserializer<Subtask> {
     @Override
     public Subtask deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
-        Subtask result = null;
+        Subtask result;
         var id = jsonObject.get("id");
         var epicId = jsonObject.get("epicId").getAsInt();
         var name = jsonObject.get("name").getAsString();
