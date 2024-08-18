@@ -19,7 +19,8 @@ public class BaseHttpHandler implements HttpHandler {
             os.write(responseString.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new RuntimeException(e);
-        };
+        }
+        ;
     }
 
     protected Optional<Integer> getId(HttpExchange exchange) {

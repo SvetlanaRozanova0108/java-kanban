@@ -9,20 +9,11 @@ public class HttpTaskServer {
 
     private HttpServer httpServer;
     private final TaskManager taskManager;
+
     private static Gson gson;
 
     public HttpTaskServer(TaskManager taskManager) {
         this.taskManager = taskManager;
-        gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Task.class, new TaskSerializer())
-                .registerTypeAdapter(Subtask.class, new SubtaskSerializer())
-                .registerTypeAdapter(Epic.class, new EpicSerializer())
-                .registerTypeAdapter(Task.class, new TaskDeserializer())
-                .registerTypeAdapter(Subtask.class, new SubtaskDeserializer())
-                .registerTypeAdapter(Epic.class, new EpicDeserializer())
-                .create();
-
     }
 
     public static void main(String[] args) throws IOException {
@@ -30,8 +21,6 @@ public class HttpTaskServer {
         var taskManager = FileBackedTaskManager.loadFromFile(saveTmpFile);
         HttpTaskServer taskServer = new HttpTaskServer(taskManager);
         taskServer.start();
-
-        //taskServer.stop();
     }
 
     public void stop() {
@@ -48,7 +37,19 @@ public class HttpTaskServer {
         httpServer.start();
     }
 
-    public Gson getGson() {
+    public static Gson getGson() {
+
+        if (gson == null) {
+            gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .registerTypeAdapter(Task.class, new TaskSerializer())
+                    .registerTypeAdapter(Subtask.class, new SubtaskSerializer())
+                    .registerTypeAdapter(Epic.class, new EpicSerializer())
+                    .registerTypeAdapter(Task.class, new TaskDeserializer())
+                    .registerTypeAdapter(Subtask.class, new SubtaskDeserializer())
+                    .registerTypeAdapter(Epic.class, new EpicDeserializer())
+                    .create();
+        }
         return gson;
     }
 }
