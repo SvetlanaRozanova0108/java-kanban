@@ -2,6 +2,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+
 public class Task {
 
     private Integer id;
@@ -22,6 +23,14 @@ public class Task {
         this.name = name;
         this.description = description;
         this.status = status;
+    }
+
+    public Task(String name, String descr, Status status, Duration duration, LocalDateTime start) {
+        this.name = name;
+        this.description = descr;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = start;
     }
 
     public Integer getId() {
@@ -108,3 +117,4 @@ public class Task {
         return id + ",task," + name + "," + status + "," + description + "," + startStr + "," + durStr + ",";
     }
 }
+

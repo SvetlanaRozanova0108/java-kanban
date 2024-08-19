@@ -9,6 +9,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/test/testData" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/gson" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/http" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/http/handlers" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -54,5 +57,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="google.code.gson" level="project" />
   </component>
 </module>
