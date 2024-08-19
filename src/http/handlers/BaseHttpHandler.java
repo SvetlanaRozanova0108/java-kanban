@@ -12,7 +12,7 @@ public class BaseHttpHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
     }
 
-    private void writeResponse(HttpExchange exchange, String responseString, int responseCode) throws RuntimeException {
+    private void writeResponse(HttpExchange exchange, String responseString, int responseCode) {
         try (OutputStream os = exchange.getResponseBody(); exchange) {
             exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
             exchange.sendResponseHeaders(responseCode, 0);
@@ -35,7 +35,7 @@ public class BaseHttpHandler implements HttpHandler {
         return Optional.of(result);
     }
 
-    protected void sendText(HttpExchange h, String text) throws RuntimeException {
+    protected void sendText(HttpExchange h, String text) {
         try (h) {
             byte[] resp = text.getBytes(StandardCharsets.UTF_8);
             h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
